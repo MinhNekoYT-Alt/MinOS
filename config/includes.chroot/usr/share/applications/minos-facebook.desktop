@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Facebook
+Comment=Open Facebook in a separate Chrome app window
+Exec=google-chrome-stable --app=https://www.facebook.com/
+Icon=google-chrome
+Terminal=false
+Categories=Network;Social;
+StartupNotify=true

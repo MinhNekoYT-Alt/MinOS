@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Zalo Web
+Name[vi]=Zalo Web
+Comment=Open Zalo Web in a separate Chrome app window
+Comment[vi]=Mở Zalo Web trong cửa sổ ứng dụng Chrome riêng
+Exec=google-chrome-stable --app=https://chat.zalo.me/
+Icon=google-chrome
+Terminal=false
+Categories=Network;Chat;
+StartupNotify=true

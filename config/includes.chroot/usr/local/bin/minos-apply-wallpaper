@@ -1,0 +1,17 @@
+#!/bin/sh
+set -eu
+
+MARKER="${XDG_CONFIG_HOME:-$HOME/.config}/.minos-wallpaper-initialized"
+WALLPAPER="/usr/share/backgrounds/minos/minos-wallpaper.png"
+
+[ -e "$MARKER" ] && exit 0
+[ -r "$WALLPAPER" ] || exit 0
+
+if command -v gsettings >/dev/null 2>&1; then
+    gsettings set org.cinnamon.desktop.background picture-uri "file://$WALLPAPER" >/dev/null 2>&1 || true
+    gsettings set org.cinnamon.desktop.background picture-uri-dark "file://$WALLPAPER" >/dev/null 2>&1 || true
+fi
+
+mkdir -p "$(dirname "$MARKER")"
+touch "$MARKER"
+exit 0

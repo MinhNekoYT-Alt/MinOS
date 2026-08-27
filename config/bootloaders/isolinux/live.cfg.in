@@ -1,0 +1,5 @@
+label live
+	menu label ^Start MinOS
+	menu default
+	kernel @KERNEL@
+	append initrd=@INITRD@ @LB_BOOTAPPEND_LIVE@

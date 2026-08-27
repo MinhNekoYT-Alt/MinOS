@@ -1,0 +1,54 @@
+# MinOS Desktop common base
+ubuntu-standard
+linux-generic
+linux-firmware
+intel-microcode
+amd64-microcode
+firmware-sof-signed
+locales
+live-boot
+live-config
+systemd
+syslinux-utils
+network-manager
+flatpak
+timeshift
+
+# Browser and essential applications
+google-chrome-stable
+firefox
+file-roller
+vlc
+curl
+wget
+git
+vim
+neofetch
+htop
+btop
+gparted
+pciutils
+usbutils
+wireless-tools
+
+# Hardware detection and graphics support
+ubuntu-drivers-common
+software-properties-qt
+dkms
+broadcom-sta-dkms
+rtl8812au-dkms
+mesa-vulkan-drivers
+mesa-va-drivers
+mesa-utils
+vulkan-tools
+xserver-xorg-video-amdgpu
+
+# English locale and compact default font set
+language-pack-en
+language-pack-gnome-en
+language-pack-vi
+language-pack-gnome-vi
+fcitx5
+fcitx5-unikey
+fonts-dejavu
+fonts-noto-core

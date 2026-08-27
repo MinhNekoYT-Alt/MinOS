@@ -1,0 +1,13 @@
+[org.cinnamon.desktop.background]
+picture-uri='file:///usr/share/backgrounds/minos/minos-wallpaper.png'
+picture-uri-dark='file:///usr/share/backgrounds/minos/minos-wallpaper.png'
+primary-color='#071B3A'
+secondary-color='#0B5ED7'
+color-shading-type='vertical'
+
+[org.cinnamon.desktop.interface]
+icon-theme='Mint-Y'
+clock-show-weekday=true
+
+[org.cinnamon]
+favorite-apps=['firefox_firefox.desktop', 'nemo.desktop', 'google-chrome.desktop', 'minos-update-center.desktop']

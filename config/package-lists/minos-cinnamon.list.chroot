@@ -1,0 +1,34 @@
+# Lean Cinnamon desktop based on Ubuntu Noble packages and Linux Mint-developed components available in Ubuntu.
+cinnamon
+cinnamon-control-center
+cinnamon-screensaver
+nemo
+nemo-fileroller
+lightdm
+slick-greeter
+mint-y-icons
+dconf-cli
+xapps-common
+
+# Linux Mint Zena distribution layer and user-facing tools
+mintupdate
+mintinstall
+mintdrivers
+mintdesktop
+mintwelcome
+mint-themes
+warpinator
+webapp-manager
+
+# Calamares graphical installer and installed-system boot support
+calamares
+calamares-settings-ubuntu-common
+grub-efi-amd64-signed
+shim-signed
+isolinux
+os-prober
+efibootmgr
+cryptsetup
+lvm2
+btrfs-progs
+xfsprogs

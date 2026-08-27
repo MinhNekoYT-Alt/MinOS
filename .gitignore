@@ -1,0 +1,23 @@
+# live-build output and mutable staging
+/.build/
+/binary/
+/chroot/
+/cache/
+/local/
+/.lock
+
+# Generated release artifacts, logs and package manifests
+/build/
+/binary.hybrid.iso
+/binary.iso
+/live-image-*.iso
+/live-image-*.hybrid.iso
+/binary.packages
+/chroot.packages.install
+/chroot.packages.live
+/wget-log*
+
+# Landing-page local build artifacts
+/landing-page/node_modules/
+/landing-page/dist/
+/landing-page/.manus-logs/

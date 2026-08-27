@@ -1,0 +1,3 @@
+#!/bin/sh
+# MinOS Cinnamon design reminder: terminal identity uses the penguin mascot only; no desktop-specific assumptions.
+exec /usr/bin/neofetch --source /usr/share/minos/minos-penguin-ascii.txt "$@"

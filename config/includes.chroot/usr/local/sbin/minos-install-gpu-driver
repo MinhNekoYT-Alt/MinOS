@@ -1,0 +1,32 @@
+#!/bin/sh
+set -eu
+
+STATE=/var/lib/minos/gpu-driver-checked
+
+# Never alter the ephemeral Live session; run only on the installed system.
+if [ -e /run/live/medium ] || grep -Eq '(^|[[:space:]])boot=(live|casper)([[:space:]]|$)' /proc/cmdline 2>/dev/null; then
+    exit 0
+fi
+
+if [ -e "$STATE" ]; then
+    exit 0
+fi
+
+mkdir -p "$(dirname "$STATE")"
+
+if ! command -v ubuntu-drivers >/dev/null 2>&1; then
+    touch "$STATE"
+    exit 0
+fi
+
+if command -v lspci >/dev/null 2>&1 && lspci -nn | grep -qi 'NVIDIA'; then
+    if ubuntu-drivers install; then
+        touch "$STATE"
+        exit 0
+    fi
+    exit 1
+fi
+
+# Intel and AMD desktop graphics use the kernel/Mesa stack shipped in MinOS.
+touch "$STATE"
+exit 0

@@ -1,0 +1,46 @@
+#!/bin/sh
+set -eu
+
+DESKTOP_LABEL="Cinnamon"
+
+if [ -f /etc/os-release ]; then
+    if grep -q '^MINOS_DESKTOP=' /etc/os-release; then
+        sed -i "s/^MINOS_DESKTOP=.*/MINOS_DESKTOP=\"$DESKTOP_LABEL\"/" /etc/os-release
+    else
+        printf 'MINOS_DESKTOP="%s"\n' "$DESKTOP_LABEL" >> /etc/os-release
+    fi
+fi
+
+# Compile GNOME defaults after the MinOS override has been copied in.
+if command -v glib-compile-schemas >/dev/null 2>&1 && [ -d /usr/share/glib-2.0/schemas ]; then
+    glib-compile-schemas /usr/share/glib-2.0/schemas
+fi
+
+# Keep the base system recognizably MinOS without replacing Ubuntu package metadata.
+mkdir -p /usr/share/doc/minos
+cat > /usr/share/doc/minos/README.md <<EOF
+# MinOS
+
+MinOS is a Linux Mint Cinnamon community distribution layer built on Ubuntu 24.04 LTS (Noble).
+
+Base: Ubuntu 24.04 LTS (Noble)
+Release line: Aurora
+Desktop edition: ${DESKTOP_LABEL}
+
+This image is a development build. Review package licenses and trademark requirements before redistribution.
+EOF
+
+cat > /etc/lsb-release <<'EOF'
+DISTRIB_ID=MinOSDesktop
+DISTRIB_RELEASE=24.04
+DISTRIB_CODENAME=noble
+DISTRIB_DESCRIPTION="MinOS Desktop 24.04 LTS"
+EOF
+
+# Avoid persisting build-host identity in the live filesystem.
+rm -f /etc/machine-id
+rm -f /var/lib/dbus/machine-id
+ln -s /etc/machine-id /var/lib/dbus/machine-id 2>/dev/null || true
+
+# Make sure temporary package metadata does not unnecessarily inflate the image.
+rm -rf /var/lib/apt/lists/*

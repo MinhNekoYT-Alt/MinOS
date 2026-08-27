@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
+<wallpapers>
+  <wallpaper deleted="false">
+    <name>MinOS Aurora</name>
+    <filename>/usr/share/backgrounds/minos/minos-wallpaper.png</filename>
+    <options>zoom</options>
+    <pcolor>#071B3A</pcolor>
+    <scolor>#0B5ED7</scolor>
+    <shade_type>vertical-gradient</shade_type>
+  </wallpaper>
+</wallpapers>

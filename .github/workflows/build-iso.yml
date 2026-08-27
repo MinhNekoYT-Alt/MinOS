@@ -1,0 +1,72 @@
+name: Build MinOS Desktop ISO
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "build.sh"
+      - "build-minos.sh"
+      - "auto/**"
+      - "assets/**"
+      - "config/**"
+      - "tools/**"
+      - ".github/workflows/build-iso.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build-amd64:
+    name: Build Cinnamon amd64 ISO
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Validate source configuration
+        run: ./verify-minos.sh
+
+      - name: Build MinOS Desktop ISO
+        # live-build on Noble can surface a package-manager confirmation while
+        # it refreshes the isolated chroot. The source build remains fully
+        # deterministic; only those package confirmations are answered here.
+        run: yes Y | MINOS_EDITION=cinnamon ./build.sh
+
+      - name: Verify release artifact
+        run: |
+          set -Eeuo pipefail
+          iso='build/MinOS-Desktop-Cinnamon-24.04-amd64.iso'
+          checksum="$iso.sha256"
+          test -s "$iso"
+          test -s "$checksum"
+          sha256sum --check "$checksum"
+          test "$(stat -c '%s' "$iso")" -lt 4294967296
+          xorriso -indev "$iso" -report_el_torito plain | grep -q 'BIOS'
+          xorriso -indev "$iso" -report_el_torito plain | grep -q 'UEFI'
+
+      - name: Upload ISO and checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: MinOS-Desktop-Cinnamon-24.04-amd64
+          path: |
+            build/MinOS-Desktop-Cinnamon-24.04-amd64.iso
+            build/MinOS-Desktop-Cinnamon-24.04-amd64.iso.sha256
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minos-build-logs
+          path: |
+            build/*.log
+            build/*validation*.txt
+            build/*audit*.txt
+            build/release-runtime-summary.txt
+          if-no-files-found: warn
+          retention-days: 14

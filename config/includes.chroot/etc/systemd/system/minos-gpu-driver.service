@@ -1,0 +1,13 @@
+[Unit]
+Description=MinOS hardware-aware GPU driver setup
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/usr/sbin/ubuntu-drivers
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/minos-install-gpu-driver
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

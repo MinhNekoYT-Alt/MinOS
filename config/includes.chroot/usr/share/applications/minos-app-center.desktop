@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=MinOS Software — Featured Apps
+Name[vi]=Phần mềm MinOS — Ứng dụng nổi bật
+Comment=Open featured services and optional developer tools
+Comment[vi]=Mở dịch vụ nổi bật và công cụ phát triển tùy chọn
+Exec=minos-software-catalog
+Icon=org.x.apps.SoftwareManager
+Terminal=false
+Categories=System;PackageManager;
+StartupNotify=true

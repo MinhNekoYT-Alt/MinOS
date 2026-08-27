@@ -1,0 +1,14 @@
+NAME="MinOS Desktop"
+PRETTY_NAME="MinOS Desktop 24.04 LTS"
+ID=minos
+ID_LIKE="ubuntu debian"
+VERSION_ID="24.04"
+VERSION="24.04 LTS (Noble base)"
+VERSION_CODENAME=noble
+UBUNTU_CODENAME=noble
+HOME_URL="https://minos.example.org/"
+DOCUMENTATION_URL="https://minos.example.org/docs"
+SUPPORT_URL="https://minos.example.org/support"
+BUG_REPORT_URL="https://minos.example.org/issues"
+MINOS_RELEASE="Aurora"
+MINOS_DESKTOP="Cinnamon"

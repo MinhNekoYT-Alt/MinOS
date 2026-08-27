@@ -1,0 +1,21 @@
+# MinOS Cinnamon Transition Checklist
+
+- [x] Dừng và dọn an toàn build KDE Plasma đã lỗi thời.
+- [x] Kiểm tra nguồn chính thức Linux Mint và Ubuntu 24.04 để chốt thành phần Cinnamon/Mint tương thích.
+- [x] Đổi package profiles, branding desktop, SDDM/session và installer sang Cinnamon.
+- [ ] Đánh giá Timeshift, Warpinator, WebApp Manager và cập nhật có kiểm soát theo license/repository.
+- [x] Cập nhật Calamares slideshow, boot copy, README và landing page từ KDE sang Cinnamon.
+- [x] Thay BIOS splash bằng chim cánh cụt không chữ, giữ desktop/installer sử dụng nền MinOS có chữ.
+- [x] Rà package candidate cho Bottles, WPS Office, Zalo và driver DKMS trước khi quyết định app nào có trong ISO.
+- [x] Xác minh chính sách Update Center: thông báo qua mintupdate, không dùng OTA curl hoặc forced upgrade.
+- [ ] Build và kiểm tra menu BIOS/UEFI, Live Cinnamon, Calamares slideshow và GRUB dual boot bằng VM.
+- [x] Cấu hình Linux Mint repository/keyring tương thích với Ubuntu Noble và dùng `mintupdate` làm Update Center.
+- [x] Kiểm thử dependency Mint trên chroot trước khi build full ISO.
+- [ ] Dựng lại ISO amd64, xác minh cấu trúc boot BIOS/UEFI và installer.
+- [ ] Đóng gói source, commit và đẩy lên GitHub.
+- [x] Tạo nền GRUB UEFI từ wallpaper do người dùng cung cấp, loại bỏ chim cánh cụt và chữ MinOS khỏi ảnh boot đó.
+- [x] Đánh giá và ghi rõ mục tiêu tài nguyên thực tế; không cam kết sai rằng Cinnamon + ứng dụng desktop có thể chạy đầy đủ trong 1 GB RAM hoặc chiếm 5 GB disk.
+- [x] Đổi nhãn Software Manager thành MinOS Software và thêm catalog/launcher có kiểm soát cho YouTube, Facebook, TikTok, Android Studio và Waydroid.
+- [x] Chốt phạm vi artifact hiện tại là amd64; đánh giá riêng amd32 thay vì đưa ra claim chưa có ISO 32-bit.
+- [x] Thêm GitHub Actions tái lập được để build ISO và upload artifact/checksum; không đưa ISO nhiều GB vào Git thường.
+- [x] Sửa quy trình Flatpak preinstall, tái đóng gói ISO và xác thực menu BIOS/UEFI cùng nội dung rootfs cuối.

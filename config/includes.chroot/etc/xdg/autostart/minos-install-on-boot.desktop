@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=MinOS Installer Boot Mode
+Comment=Start Calamares when Install MinOS Desktop was selected at boot
+Exec=/usr/local/bin/minos-install-on-boot
+Terminal=false
+StartupNotify=true
+OnlyShowIn=Cinnamon;
+X-GNOME-Autostart-enabled=true

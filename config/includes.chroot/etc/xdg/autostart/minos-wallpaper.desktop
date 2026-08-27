@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=MinOS Wallpaper Initializer
+Comment=Apply the default MinOS Desktop wallpaper once
+Exec=/usr/local/bin/minos-apply-wallpaper
+Terminal=false
+StartupNotify=false
+OnlyShowIn=Cinnamon;
+X-GNOME-Autostart-enabled=true

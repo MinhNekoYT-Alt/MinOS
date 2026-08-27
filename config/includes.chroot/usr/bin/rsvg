@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+if [[ $# -lt 2 ]]; then
+  echo "Usage: rsvg [options] input.svg output.png" >&2
+  exit 2
+fi
+
+output="${@: -1}"
+args=("${@:1:$#-1}")
+exec /usr/bin/rsvg-convert "${args[@]}" --output="$output"

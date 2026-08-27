@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=MinOS Update Center
+Name[vi]=Trung tâm cập nhật MinOS
+Comment=Review and choose updates in MinOS Update Center
+Comment[vi]=Xem và chọn cập nhật trong Trung tâm cập nhật MinOS
+Exec=minos-update-center
+Icon=system-software-update
+Terminal=false
+Categories=System;Settings;
+StartupNotify=true

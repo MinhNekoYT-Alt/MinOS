@@ -1,0 +1,59 @@
+#!/bin/sh
+# MinOS Cinnamon design reminder: offer a small, user-controlled catalog that
+# leads into Mintinstall/Flatpak rather than silently installing applications.
+set -eu
+
+install_flatpak() {
+  app_name="$1"
+  app_id="$2"
+  if zenity --question --title="$app_name" \
+    --text="Install $app_name from Flathub for this user? The download size and available disk space will be shown by Flatpak."; then
+    if flatpak install --user --noninteractive flathub "$app_id"; then
+      zenity --info --title="$app_name" --text="$app_name is installed for this user."
+    else
+      zenity --error --title="$app_name" --text="Installation did not complete. Open MinOS Software to review the package."
+      mintinstall
+    fi
+  fi
+}
+
+choice="$(zenity --list --title='MinOS Software' \
+  --text='Choose a featured application or service. Installs remain under your control.' \
+  --column='Application' --column='Availability' \
+  'Bottles' 'Optional Flatpak — Windows app environment manager' \
+  'WPS Office' 'Optional Flatpak — office suite' \
+  'YouTube' 'Chrome app — launch now' \
+  'Facebook' 'Chrome app — launch now' \
+  'TikTok' 'Chrome app — launch now' \
+  'Android Studio' 'Community Flatpak — optional install' \
+  'Waydroid' 'Optional; requires Wayland and its official repository' \
+  'Browse all software' 'Open MinOS Software' \
+  --width=720 --height=390 2>/dev/null || true)"
+
+case "$choice" in
+  Bottles)
+    install_flatpak 'Bottles' com.usebottles.bottles
+    ;;
+  'WPS Office')
+    install_flatpak 'WPS Office' com.wps.Office
+    ;;
+  YouTube)
+    exec google-chrome-stable --app=https://www.youtube.com/
+    ;;
+  Facebook)
+    exec google-chrome-stable --app=https://www.facebook.com/
+    ;;
+  TikTok)
+    exec google-chrome-stable --app=https://www.tiktok.com/
+    ;;
+  'Android Studio')
+    install_flatpak 'Android Studio' com.google.AndroidStudio
+    ;;
+  Waydroid)
+    zenity --info --title='Waydroid' --text='Waydroid is optional. It needs a Wayland session and an additional official Waydroid repository on Ubuntu 24.04. MinOS does not add that third-party repository automatically. The official documentation will open in your browser.'
+    exec xdg-open https://docs.waydro.id/usage/install-on-desktops
+    ;;
+  'Browse all software'|*)
+    exec mintinstall
+    ;;
+esac

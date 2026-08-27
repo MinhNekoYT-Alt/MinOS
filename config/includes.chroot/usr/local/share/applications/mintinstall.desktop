@@ -1,0 +1,14 @@
+[Desktop Entry]
+# MinOS Cinnamon design reminder: retain Mintinstall's trusted APT/Flatpak UI,
+# but present one concise MinOS Software identity in the desktop.
+Type=Application
+Name=MinOS Software
+Name[vi]=Phần mềm MinOS
+Comment=Browse trusted software and Flatpak applications
+Comment[vi]=Duyệt phần mềm đáng tin cậy và ứng dụng Flatpak
+Exec=mintinstall
+Icon=org.x.apps.SoftwareManager
+Terminal=false
+Categories=System;PackageManager;
+Keywords=software;apps;flatpak;android studio;MinOS;
+StartupNotify=true

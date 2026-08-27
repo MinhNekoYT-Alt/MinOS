@@ -1,0 +1,8 @@
+#!/bin/sh
+# MinOS Cinnamon design reminder: keep a signed Flathub remote in the image.
+# Bottles, WPS Office and Android Studio remain optional in MinOS Software;
+# preinstalling their large runtimes makes the Live ISO impractical and can
+# exceed ISO-9660 legacy file-size limits.
+set -eu
+
+flatpak remote-add --system --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo

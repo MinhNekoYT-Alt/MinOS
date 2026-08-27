@@ -1,0 +1,31 @@
+#!/bin/sh
+set -e
+
+# Use ISO Level 3 for modern filesystem metadata while the large applications
+# remain optional downloads in MinOS Software rather than being embedded in
+# the Live ISO.
+export GENISOIMAGE_OPTIONS_EXTRA="-iso-level 3"
+export LB_ZSYNC=false
+
+lb config noauto \
+  --mode ubuntu \
+  --distribution noble \
+  --architectures amd64 \
+  --archive-areas "main restricted universe multiverse" \
+  --binary-images iso-hybrid \
+  --debian-installer false \
+  --bootloader syslinux \
+  --initramfs live-boot \
+  --initsystem systemd \
+  --syslinux-theme live-build \
+  --linux-flavours generic \
+  --apt-recommends true \
+  --apt-options "-o Dpkg::Options::=--force-confold" \
+  --bootappend-live "boot=live quiet username=minos hostname=minos" \
+  --iso-application "MinOS" \
+  --iso-publisher "MinOS Project" \
+  --iso-volume "MINOS_2404" \
+  --hdd-label "MINOS" \
+  --iso-preparer "MinOS build system" \
+  --memtest none \
+  --grub-splash config/binary_grub/splash.tga

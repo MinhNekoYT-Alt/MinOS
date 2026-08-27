@@ -1,0 +1,23 @@
+---
+componentName: minos
+windowExpanding: fullscreen
+strings:
+    productName:         MinOS Desktop
+    shortProductName:    MinOS
+    version:             24.04 LTS
+    shortVersion:        noble
+    versionedName:       MinOS Desktop 24.04 LTS
+    shortVersionedName:  MinOS Desktop 24.04 LTS
+    bootloaderEntryName: MinOS Desktop
+    productUrl:          https://minos.example.org/
+    supportUrl:          https://minos.example.org/support/
+images:
+    productLogo:         "logo.png"
+    productIcon:         "icon.png"
+    productWelcome:      "welcome.png"
+slideshow:               "show.qml"
+slideshowAPI:            2
+style:
+    SidebarBackground:   "#07152E"
+    SidebarText:         "#FFFFFF"
+    SidebarTextCurrent:  "#2C8CFF"

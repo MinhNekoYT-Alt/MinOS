@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=TikTok
+Comment=Open TikTok in a separate Chrome app window
+Exec=google-chrome-stable --app=https://www.tiktok.com/
+Icon=google-chrome
+Terminal=false
+Categories=Network;AudioVideo;
+StartupNotify=true

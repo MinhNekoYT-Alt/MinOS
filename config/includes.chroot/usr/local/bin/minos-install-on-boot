@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+
+if grep -qw -- 'minos-install' /proc/cmdline; then
+    sleep 3
+    exec sh -c 'sudo -E calamares -D6'
+fi
+
+exit 0

@@ -1,0 +1,85 @@
+/* Northern Signal style: obsidian technical surfaces, Signal Glacier accents,
+   Space Grotesk editorial hierarchy and restrained, purposeful motion. */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+  --radius: 0px;
+  --background: oklch(0.13 0.016 235);
+  --foreground: oklch(0.94 0.014 210);
+  --card: oklch(0.17 0.02 235);
+  --card-foreground: oklch(0.94 0.014 210);
+  --popover: oklch(0.17 0.02 235);
+  --popover-foreground: oklch(0.94 0.014 210);
+  --primary: oklch(0.84 0.12 210);
+  --primary-foreground: oklch(0.13 0.02 235);
+  --secondary: oklch(0.21 0.022 235);
+  --secondary-foreground: oklch(0.84 0.02 210);
+  --muted: oklch(0.21 0.022 235);
+  --muted-foreground: oklch(0.7 0.03 215);
+  --accent: oklch(0.21 0.022 235);
+  --accent-foreground: oklch(0.94 0.014 210);
+  --destructive: oklch(0.65 0.2 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.94 0.014 210 / 13%);
+  --input: oklch(0.94 0.014 210 / 16%);
+  --ring: oklch(0.84 0.12 210);
+}
+
+.dark { color-scheme: dark; }
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  html { scroll-behavior: smooth; }
+  body { @apply bg-background text-foreground; font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  button:not(:disabled), a[href] { @apply cursor-pointer; }
+}
+
+@layer components {
+  .font-display { font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif; }
+  .nav-link { position: relative; transition: color 180ms cubic-bezier(.23, 1, .32, 1); }
+  .nav-link::after { background: #5de1ff; bottom: -6px; content: ""; height: 1px; left: 0; position: absolute; transform: scaleX(0); transform-origin: left; transition: transform 180ms cubic-bezier(.23, 1, .32, 1); width: 100%; }
+  .nav-link:hover { color: #f4fbff; }
+  .nav-link:hover::after { transform: scaleX(1); }
+  .eyebrow { color: #5de1ff; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; }
+  .signal-button, .ghost-button { align-items: center; display: inline-flex; font-size: .875rem; gap: .5rem; min-height: 2.9rem; padding: .7rem 1rem; transition: transform 160ms cubic-bezier(.23, 1, .32, 1), background-color 180ms cubic-bezier(.23, 1, .32, 1), border-color 180ms cubic-bezier(.23, 1, .32, 1); }
+  .signal-button { background: #5de1ff; color: #071017; }
+  .signal-button:hover { background: #b9f3ff; transform: translateY(-2px); }
+  .ghost-button { border: 1px solid rgb(255 255 255 / .15); color: #e9f3f7; }
+  .ghost-button:hover { border-color: rgb(93 225 255 / .6); background: rgb(93 225 255 / .08); }
+  .signal-button:active, .ghost-button:active { transform: scale(.97); }
+  .signal-grain { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.15'/%3E%3C/svg%3E"); mix-blend-mode: soft-light; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-orb { animation: drift 8s cubic-bezier(.77, 0, .175, 1) infinite alternate; }
+  @keyframes drift { from { transform: translate3d(0, -10px, 0); } to { transform: translate3d(42px, 24px, 0); } }
+}

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+# Mint Update Manager detects available packages and notifies the desktop.
+# It never applies an update until the user reviews and confirms it in its UI.
+if command -v mintupdate >/dev/null 2>&1; then
+  exec mintupdate "$@"
+fi
+
+printf '%s\n' 'MinOS Update Center requires mintupdate.' >&2
+exit 1

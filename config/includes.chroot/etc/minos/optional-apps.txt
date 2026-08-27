@@ -1,0 +1,15 @@
+# MinOS application map
+# Bottles, WPS Office and Android Studio are optional user-installed Flatpak
+# applications from the signed Flathub remote. Zalo is delivered as a Chrome
+# Web App launcher; MinOS does not bundle an unofficial Zalo binary.
+
+Bottles|com.usebottles.bottles|Optional Flathub install|Windows application compatibility manager
+WPS Office|com.wps.Office|Optional Flathub install|Proprietary office suite; use is subject to its upstream licence
+Android Studio|com.google.AndroidStudio|Optional community Flatpak install|Android development IDE; community-maintained Flatpak package
+Waydroid|https://docs.waydro.id/usage/install-on-desktops|Optional official setup|Needs Wayland and an additional official repository on Ubuntu Noble
+Zalo Web|https://chat.zalo.me/|Preinstalled Chrome launcher|A web app, requires a Zalo account and network connection
+YouTube|https://www.youtube.com/|Preinstalled Chrome launcher|Web service, requires an account only for personal features
+Facebook|https://www.facebook.com/|Preinstalled Chrome launcher|Web service, requires an account and network connection
+TikTok|https://www.tiktok.com/|Preinstalled Chrome launcher|Web service, requires an account and network connection
+Warpinator|warpinator|Preinstalled from Linux Mint Zena|Local-network file sharing utility
+WebApp Manager|webapp-manager|Preinstalled from Linux Mint Zena|Create isolated website launchers
