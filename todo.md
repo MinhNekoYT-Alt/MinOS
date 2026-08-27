@@ -19,3 +19,4 @@
 - [x] Chốt phạm vi artifact hiện tại là amd64; đánh giá riêng amd32 thay vì đưa ra claim chưa có ISO 32-bit.
 - [x] Thêm GitHub Actions tái lập được để build ISO và upload artifact/checksum; không đưa ISO nhiều GB vào Git thường.
 - [x] Sửa quy trình Flatpak preinstall, tái đóng gói ISO và xác thực menu BIOS/UEFI cùng nội dung rootfs cuối.
+- [x] Sửa dependency Python Pillow của GitHub Actions; workflow ISO đã hoàn tất thành công sau bản vá.
