@@ -40,6 +40,7 @@ sudo apt-get install -y \
   shim-signed \
   mtools \
   dosfstools \
+  python3-pil \
   syslinux-utils \
   syslinux-common \
   qemu-system-x86
