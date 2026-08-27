@@ -12,7 +12,7 @@
 - [x] Cấu hình Linux Mint repository/keyring tương thích với Ubuntu Noble và dùng `mintupdate` làm Update Center.
 - [x] Kiểm thử dependency Mint trên chroot trước khi build full ISO.
 - [ ] Dựng lại ISO amd64, xác minh cấu trúc boot BIOS/UEFI và installer.
-- [ ] Đóng gói source, commit và đẩy lên GitHub.
+- [x] Đóng gói source, commit và đẩy lên GitHub.
 - [x] Tạo nền GRUB UEFI từ wallpaper do người dùng cung cấp, loại bỏ chim cánh cụt và chữ MinOS khỏi ảnh boot đó.
 - [x] Đánh giá và ghi rõ mục tiêu tài nguyên thực tế; không cam kết sai rằng Cinnamon + ứng dụng desktop có thể chạy đầy đủ trong 1 GB RAM hoặc chiếm 5 GB disk.
 - [x] Đổi nhãn Software Manager thành MinOS Software và thêm catalog/launcher có kiểm soát cho YouTube, Facebook, TikTok, Android Studio và Waydroid.
