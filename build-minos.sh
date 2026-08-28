@@ -72,7 +72,15 @@ case "$BUILD_STAGE" in
     sudo rm -rf chroot/binary chroot/chroot chroot.tmp
     sudo lb bootstrap 2>&1 | tee "$LOG_FILE"
     sudo lb chroot 2>&1 | tee -a "$LOG_FILE"
-    sudo tar --zstd -cf "$PROJECT_DIR/build/minos-os-stage.tar.zst" chroot
+    # Binary stage needs live-build metadata outside the chroot as well.
+    # In particular, lb_binary_manifest reads chroot.packages.live.
+    stage_paths=(chroot)
+    for candidate in chroot.* .build/bootstrap .build/chroot; do
+      if [[ -e "$candidate" ]]; then
+        stage_paths+=("$candidate")
+      fi
+    done
+    sudo tar --zstd -cf "$PROJECT_DIR/build/minos-os-stage.tar.zst" "${stage_paths[@]}"
     sudo chown "$(id -u):$(id -g)" "$PROJECT_DIR/build/minos-os-stage.tar.zst" "$LOG_FILE"
     sha256sum "$PROJECT_DIR/build/minos-os-stage.tar.zst" | tee "$PROJECT_DIR/build/minos-os-stage.tar.zst.sha256"
     exit 0

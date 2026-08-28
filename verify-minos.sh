@@ -224,6 +224,7 @@ grep -q '^name: Build and Release MinOS Desktop$' "$ROOT/.github/workflows/build
 grep -q 'runs-on: ubuntu-24.04' "$ROOT/.github/workflows/build-iso.yml"
 grep -q 'MINOS_BUILD_STAGE=os ./build.sh' "$ROOT/.github/workflows/build-iso.yml"
 grep -q 'MINOS_BUILD_STAGE=iso' "$ROOT/.github/workflows/build-iso.yml"
+grep -q 'chroot.packages.live' "$ROOT/build-minos.sh"
 grep -q 'actions/upload-artifact@v4' "$ROOT/.github/workflows/build-iso.yml"
 grep -q 'gh release create' "$ROOT/.github/workflows/build-iso.yml"
 grep -q 'title="MinOS - Version' "$ROOT/.github/workflows/build-iso.yml"
