@@ -20,5 +20,5 @@
 - [x] Thêm GitHub Actions tái lập được để build ISO và upload artifact/checksum; không đưa ISO nhiều GB vào Git thường.
 - [x] Sửa quy trình Flatpak preinstall, tái đóng gói ISO và xác thực menu BIOS/UEFI cùng nội dung rootfs cuối.
 - [x] Sửa dependency Python Pillow của GitHub Actions; workflow ISO đã hoàn tất thành công sau bản vá.
-- [ ] Tách GitHub Actions thành giai đoạn build OS và giai đoạn build ISO.
+- [x] Tách GitHub Actions thành giai đoạn build OS và giai đoạn build ISO.
 - [ ] Tạo GitHub Release tự động sau khi hai giai đoạn thành công, tên `MinOS - Version ...`, đính kèm ISO và SHA256.

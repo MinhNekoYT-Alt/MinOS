@@ -160,5 +160,4 @@ jobs:
             --repo "$GITHUB_REPOSITORY" \
             --target "$GITHUB_SHA" \
             --title "$title" \
-            --notes "MinOS Desktop Cinnamon ${MINOS_VERSION}. The ISO and SHA256 assets were produced by the two-stage OS/ISO workflow. If the ISO exceeds GitHub's per-asset limit, numbered ISO parts and a complete-file SHA256 are provided." \
-            --verify-tag=false
+            --notes "MinOS Desktop Cinnamon ${MINOS_VERSION}. The ISO and SHA256 assets were produced by the two-stage OS/ISO workflow. If the ISO exceeds GitHub's per-asset limit, numbered ISO parts and a complete-file SHA256 are provided."
