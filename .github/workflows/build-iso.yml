@@ -39,7 +39,13 @@ jobs:
         run: ./verify-minos.sh
 
       - name: Build OS stage
-        run: yes Y | MINOS_EDITION=cinnamon MINOS_BUILD_STAGE=os ./build.sh
+        run: |
+          set -Eeuo pipefail
+          set +o pipefail
+          yes Y | MINOS_EDITION=cinnamon MINOS_BUILD_STAGE=os ./build.sh
+          build_status="${PIPESTATUS[1]}"
+          set -o pipefail
+          exit "$build_status"
 
       - name: Verify OS stage archive
         run: |
@@ -78,8 +84,12 @@ jobs:
       - name: Build ISO from OS stage
         run: |
           set -Eeuo pipefail
+          set +o pipefail
           yes Y | MINOS_EDITION=cinnamon MINOS_BUILD_STAGE=iso \
             MINOS_OS_STAGE_ARCHIVE="$GITHUB_WORKSPACE/build/minos-os-stage.tar.zst" ./build.sh
+          build_status="${PIPESTATUS[1]}"
+          set -o pipefail
+          exit "$build_status"
 
       - name: Verify ISO and checksum
         run: |
