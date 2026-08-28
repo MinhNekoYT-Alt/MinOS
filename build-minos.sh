@@ -43,7 +43,8 @@ sudo apt-get install -y \
   python3-pil \
   syslinux-utils \
   syslinux-common \
-  qemu-system-x86
+  qemu-system-x86 \
+  zstd
 
 chmod +x build.sh auto/config auto/build config/hooks/normal/0100-minos-branding.hook.chroot config/hooks/normal/0200-minos-flatpak-apps.hook.chroot config/includes.chroot/usr/local/bin/minos-apply-wallpaper config/includes.chroot/usr/local/bin/minos-install-on-boot config/includes.chroot/usr/local/sbin/minos-install-gpu-driver config/includes.chroot/usr/bin/minos-update-center config/includes.chroot/usr/bin/minos-software-catalog tools/make_boot_splash.py tools/add_uefi_boot.sh
 
@@ -59,14 +60,44 @@ sudo rm -rf .build
 python3 tools/make_boot_splash.py
 ./auto/config
 
-# Remove stale build stages but keep the project configuration.
-sudo lb clean --all || true
-sudo rm -rf chroot/binary chroot/chroot chroot.tmp
-
-# Build the ISO hybrid image. Logs are retained for troubleshooting.
-LOG_FILE="$PROJECT_DIR/build/minos-build.log"
+# Build output is intentionally split so CI can pass the root filesystem
+# between an OS job and a separate ISO packaging job.
+BUILD_STAGE="${MINOS_BUILD_STAGE:-all}"
+LOG_FILE="$PROJECT_DIR/build/minos-${BUILD_STAGE}.log"
 mkdir -p "$PROJECT_DIR/build"
-sudo lb build 2>&1 | tee "$LOG_FILE"
+
+case "$BUILD_STAGE" in
+  os)
+    sudo lb clean --all || true
+    sudo rm -rf chroot/binary chroot/chroot chroot.tmp
+    sudo lb bootstrap 2>&1 | tee "$LOG_FILE"
+    sudo lb chroot 2>&1 | tee -a "$LOG_FILE"
+    sudo tar --zstd -cf "$PROJECT_DIR/build/minos-os-stage.tar.zst" chroot
+    sudo chown "$(id -u):$(id -g)" "$PROJECT_DIR/build/minos-os-stage.tar.zst" "$LOG_FILE"
+    sha256sum "$PROJECT_DIR/build/minos-os-stage.tar.zst" | tee "$PROJECT_DIR/build/minos-os-stage.tar.zst.sha256"
+    exit 0
+    ;;
+  iso)
+    OS_STAGE_ARCHIVE="${MINOS_OS_STAGE_ARCHIVE:-$PROJECT_DIR/build/minos-os-stage.tar.zst}"
+    test -s "$OS_STAGE_ARCHIVE" || { echo "Thiếu OS stage archive: $OS_STAGE_ARCHIVE" >&2; exit 1; }
+    sudo rm -rf chroot chroot.tmp
+    sudo tar --zstd -xf "$OS_STAGE_ARCHIVE"
+    sudo rm -rf chroot/binary chroot/chroot
+    ;;
+  all)
+    sudo lb clean --all || true
+    sudo rm -rf chroot/binary chroot/chroot chroot.tmp
+    sudo lb build 2>&1 | tee "$LOG_FILE"
+    ;;
+  *)
+    echo "MINOS_BUILD_STAGE phải là os, iso hoặc all." >&2
+    exit 2
+    ;;
+esac
+
+if [[ "$BUILD_STAGE" == "iso" ]]; then
+  sudo lb binary 2>&1 | tee "$LOG_FILE"
+fi
 
 ISO_SOURCE=""
 for candidate in live-image-amd64.hybrid.iso live-image-amd64.iso binary.hybrid.iso binary.iso; do

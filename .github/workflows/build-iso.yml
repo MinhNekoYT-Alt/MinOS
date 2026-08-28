@@ -1,4 +1,4 @@
-name: Build MinOS Desktop ISO
+name: Build and Release MinOS Desktop
 
 on:
   workflow_dispatch:
@@ -14,12 +14,20 @@ on:
       - "tools/**"
       - ".github/workflows/build-iso.yml"
 
+env:
+  MINOS_VERSION: "24.04.${{ github.run_number }}"
+  ISO_NAME: "MinOS-Desktop-Cinnamon-24.04-amd64.iso"
+
 permissions:
-  contents: read
+  contents: write
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
-  build-amd64:
-    name: Build Cinnamon amd64 ISO
+  build-os:
+    name: 1. Build MinOS OS root filesystem
     runs-on: ubuntu-24.04
     timeout-minutes: 180
 
@@ -30,16 +38,53 @@ jobs:
       - name: Validate source configuration
         run: ./verify-minos.sh
 
-      - name: Build MinOS Desktop ISO
-        # live-build on Noble can surface a package-manager confirmation while
-        # it refreshes the isolated chroot. The source build remains fully
-        # deterministic; only those package confirmations are answered here.
-        run: yes Y | MINOS_EDITION=cinnamon ./build.sh
+      - name: Build OS stage
+        run: yes Y | MINOS_EDITION=cinnamon MINOS_BUILD_STAGE=os ./build.sh
 
-      - name: Verify release artifact
+      - name: Verify OS stage archive
         run: |
           set -Eeuo pipefail
-          iso='build/MinOS-Desktop-Cinnamon-24.04-amd64.iso'
+          test -s build/minos-os-stage.tar.zst
+          test -s build/minos-os-stage.tar.zst.sha256
+          sha256sum --check build/minos-os-stage.tar.zst.sha256
+
+      - name: Upload OS stage for ISO job
+        uses: actions/upload-artifact@v4
+        with:
+          name: minos-os-stage
+          path: |
+            build/minos-os-stage.tar.zst
+            build/minos-os-stage.tar.zst.sha256
+            build/minos-os.log
+          if-no-files-found: error
+          retention-days: 1
+
+  build-iso:
+    name: 2. Build MinOS ISO
+    needs: build-os
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Download OS stage
+        uses: actions/download-artifact@v4
+        with:
+          name: minos-os-stage
+          path: build
+
+      - name: Build ISO from OS stage
+        run: |
+          set -Eeuo pipefail
+          yes Y | MINOS_EDITION=cinnamon MINOS_BUILD_STAGE=iso \
+            MINOS_OS_STAGE_ARCHIVE="$GITHUB_WORKSPACE/build/minos-os-stage.tar.zst" ./build.sh
+
+      - name: Verify ISO and checksum
+        run: |
+          set -Eeuo pipefail
+          iso="build/${ISO_NAME}"
           checksum="$iso.sha256"
           test -s "$iso"
           test -s "$checksum"
@@ -48,25 +93,72 @@ jobs:
           xorriso -indev "$iso" -report_el_torito plain | grep -q 'BIOS'
           xorriso -indev "$iso" -report_el_torito plain | grep -q 'UEFI'
 
-      - name: Upload ISO and checksum
+      - name: Upload ISO artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MinOS-Desktop-Cinnamon-24.04-amd64
+          name: MinOS-Desktop-Cinnamon-${{ env.MINOS_VERSION }}
           path: |
-            build/MinOS-Desktop-Cinnamon-24.04-amd64.iso
-            build/MinOS-Desktop-Cinnamon-24.04-amd64.iso.sha256
+            build/${{ env.ISO_NAME }}
+            build/${{ env.ISO_NAME }}.sha256
+            build/minos-iso.log
           if-no-files-found: error
           retention-days: 14
 
-      - name: Upload build logs
-        if: always()
-        uses: actions/upload-artifact@v4
+  release:
+    name: 3. Create GitHub Release
+    needs: build-iso
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Download ISO artifact
+        uses: actions/download-artifact@v4
         with:
-          name: minos-build-logs
-          path: |
-            build/*.log
-            build/*validation*.txt
-            build/*audit*.txt
-            build/release-runtime-summary.txt
-          if-no-files-found: warn
-          retention-days: 14
+          name: MinOS-Desktop-Cinnamon-${{ env.MINOS_VERSION }}
+          path: release-input
+
+      - name: Prepare release assets
+        id: prepare-assets
+        run: |
+          set -Eeuo pipefail
+          iso="release-input/${ISO_NAME}"
+          checksum="release-input/${ISO_NAME}.sha256"
+          test -s "$iso"
+          test -s "$checksum"
+          sha256sum --check "$checksum"
+          mkdir -p release
+          cp "$checksum" "release/${ISO_NAME}.sha256"
+
+          # GitHub requires each release asset to be below 2 GiB. Keep a normal
+          # ISO asset when possible; otherwise publish lossless numbered parts
+          # plus the checksum of the original complete ISO.
+          max_bytes=2000000000
+          size="$(stat -c '%s' "$iso")"
+          if (( size < max_bytes )); then
+            cp "$iso" "release/${ISO_NAME}"
+            printf 'asset_mode=single\n' >> "$GITHUB_OUTPUT"
+          else
+            split -b 1900M -d -a 3 "$iso" "release/${ISO_NAME}.part-"
+            sha256sum "$iso" > "release/${ISO_NAME}.complete.sha256"
+            printf 'asset_mode=split\n' >> "$GITHUB_OUTPUT"
+          fi
+
+          printf 'Release assets:\n'
+          ls -lh release
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -Eeuo pipefail
+          tag="v${MINOS_VERSION}"
+          title="MinOS - Version ${MINOS_VERSION}"
+          mapfile -t assets < <(find release -maxdepth 1 -type f -print | sort)
+          gh release create "$tag" "${assets[@]}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "$title" \
+            --notes "MinOS Desktop Cinnamon ${MINOS_VERSION}. The ISO and SHA256 assets were produced by the two-stage OS/ISO workflow. If the ISO exceeds GitHub's per-asset limit, numbered ISO parts and a complete-file SHA256 are provided." \
+            --verify-tag=false
